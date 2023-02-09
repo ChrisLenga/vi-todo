@@ -20,12 +20,19 @@ def remove_item(item):
     print("Item not found.")
 
 def view_list():
-    with open("todo.txt", "r") as file:
-        todo_list = [line.strip().split(',') for line in file]
-        todo_list = [(t[0], int(t[1])) for t in todo_list]
-    print("Here's your to-do list:")
-    for item, priority in sorted(todo_list, key=lambda x: x[1]):
-        print(f"{item} (Priority: {priority})")
+    global todo_list
+    try:
+        with open("todo.txt", "r") as file:
+            todo_list = [line.strip().split(',') for line in file]
+            todo_list = [(t[0], int(t[1])) for t in todo_list]
+        print("Here's your to-do list:")
+        for item, priority in sorted(todo_list, key=lambda x: x[1]):
+            print(f"{item} (Priority: {priority})")
+    except FileNotFoundError:
+        todo_list = []
+        print("The to-do list is empty.")
+
+
 
 def menu():
     while True:
