@@ -4,13 +4,20 @@ todo_list = []
 
 def add_item(item):
     todo_list.append(item)
+    with open("todo.txt", "a") as file:
+        file.write(item + "\n")
     print("Item added successfully.")
 
 def remove_item(item):
     todo_list.remove(item)
+    with open("todo.txt", "w") as file:
+        for i in todo_list:
+            file.write(i + "\n")
     print("Item removed successfully.")
 
 def view_list():
+    with open("todo.txt", "r") as file:
+        todo_list = file.read().splitlines()
     print("Here's your to-do list:")
     for item in todo_list:
         print(item)
