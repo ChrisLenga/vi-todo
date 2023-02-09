@@ -32,8 +32,6 @@ def view_list():
         todo_list = []
         print("The to-do list is empty.")
 
-
-
 def menu():
     while True:
         print("--- To-Do List ---")
