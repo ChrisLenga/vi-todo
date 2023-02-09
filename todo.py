@@ -2,25 +2,30 @@ import os
 
 todo_list = []
 
-def add_item(item):
-    todo_list.append(item)
+def add_item(item, priority):
+    todo_list.append((item, priority))
     with open("todo.txt", "a") as file:
-        file.write(item + "\n")
+        file.write(item + "," + str(priority) + "\n")
     print("Item added successfully.")
 
 def remove_item(item):
-    todo_list.remove(item)
-    with open("todo.txt", "w") as file:
-        for i in todo_list:
-            file.write(i + "\n")
-    print("Item removed successfully.")
+    for i, tup in enumerate(todo_list):
+        if tup[0] == item:
+            todo_list.pop(i)
+            with open("todo.txt", "w") as file:
+                for t in todo_list:
+                    file.write(t[0] + "," + str(t[1]) + "\n")
+            print("Item removed successfully.")
+            return
+    print("Item not found.")
 
 def view_list():
     with open("todo.txt", "r") as file:
-        todo_list = file.read().splitlines()
+        todo_list = [line.strip().split(',') for line in file]
+        todo_list = [(t[0], int(t[1])) for t in todo_list]
     print("Here's your to-do list:")
-    for item in todo_list:
-        print(item)
+    for item, priority in sorted(todo_list, key=lambda x: x[1]):
+        print(f"{item} (Priority: {priority})")
 
 def menu():
     while True:
@@ -32,7 +37,8 @@ def menu():
         choice = int(input("Enter your choice: "))
         if choice == 1:
             item = input("Enter the item: ")
-            add_item(item)
+            priority = int(input("Enter the priority level (1-5): "))
+            add_item(item, priority)
         elif choice == 2:
             item = input("Enter the item: ")
             remove_item(item)
