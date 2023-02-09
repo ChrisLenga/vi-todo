@@ -4,6 +4,12 @@ from datetime import datetime
 todo_list = []
 
 def add_item(item, priority, due_date):
+    priority_map = {
+        "Low": 1,
+        "Medium": 2,
+        "High": 3
+    }
+    priority = priority_map[priority]
     todo_list.append((item, priority, due_date))
     with open("todo.txt", "a") as file:
         file.write(item + "," + str(priority) + "," + due_date + "\n")
@@ -22,10 +28,15 @@ def remove_item(item):
 
 def view_list():
     global todo_list
+    priority_map = {
+        1: "Low",
+        2: "Medium",
+        3: "High"
+    }
     try:
         with open("todo.txt", "r") as file:
             todo_list = [line.strip().split(',') for line in file]
-            todo_list = [(t[0], int(t[1]), t[2]) for t in todo_list]
+            todo_list = [(t[0], priority_map[int(t[1])], t[2]) for t in todo_list]
         print("Here's your to-do list:")
         for item, priority, due_date in sorted(todo_list, key=lambda x: x[1]):
             print(f"{item} (Priority: {priority}) Due: {due_date}")
@@ -43,7 +54,7 @@ def menu():
         choice = int(input("Enter your choice: "))
         if choice == 1:
             item = input("Enter the item: ")
-            priority = int(input("Enter the priority level (1-5): "))
+            priority = input("Enter the priority level (Low, Medium, High): ")
             due_date = input("Enter the due date (MM-DD-YYYY): ")
             add_item(item, priority, due_date)
         elif choice == 2:
