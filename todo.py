@@ -3,10 +3,10 @@ from datetime import datetime
 
 todo_list = []
 
-def add_item(item, priority):
-    todo_list.append((item, priority))
+def add_item(item, priority, due_date):
+    todo_list.append((item, priority, due_date))
     with open("todo.txt", "a") as file:
-        file.write(item + "," + str(priority) + "\n")
+        file.write(item + "," + str(priority) + "," + due_date + "\n")
     print("Item added successfully.")
 
 def remove_item(item):
@@ -15,7 +15,7 @@ def remove_item(item):
             todo_list.pop(i)
             with open("todo.txt", "w") as file:
                 for t in todo_list:
-                    file.write(t[0] + "," + str(t[1]) + "\n")
+                    file.write(t[0] + "," + str(t[1]) + "," + t[2] + "\n")
             print("Item removed successfully.")
             return
     print("Item not found.")
@@ -25,10 +25,10 @@ def view_list():
     try:
         with open("todo.txt", "r") as file:
             todo_list = [line.strip().split(',') for line in file]
-            todo_list = [(t[0], int(t[1])) for t in todo_list]
+            todo_list = [(t[0], int(t[1]), t[2]) for t in todo_list]
         print("Here's your to-do list:")
-        for item, priority in sorted(todo_list, key=lambda x: x[1]):
-            print(f"{item} (Priority: {priority})")
+        for item, priority, due_date in sorted(todo_list, key=lambda x: x[1]):
+            print(f"{item} (Priority: {priority}) Due: {due_date}")
     except FileNotFoundError:
         todo_list = []
         print("The to-do list is empty.")
@@ -44,7 +44,8 @@ def menu():
         if choice == 1:
             item = input("Enter the item: ")
             priority = int(input("Enter the priority level (1-5): "))
-            add_item(item, priority)
+            due_date = input("Enter the due date (MM-DD-YYYY): ")
+            add_item(item, priority, due_date)
         elif choice == 2:
             item = input("Enter the item: ")
             remove_item(item)
